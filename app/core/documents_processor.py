@@ -54,8 +54,8 @@ class DocumentProcessor:
         logger.info(f"loaded{len(documents)} pages from {file_path.name}")
         return documents
         
-        def load_text(self, file_path: str | Path) -> list[Document]:
-            """Load a text file.
+    def load_text(self, file_path: str | Path) -> list[Document]:
+        """Load a text file.
 
         Args:
             file_path: Path to text file
@@ -90,4 +90,75 @@ class DocumentProcessor:
         logger.info(f"Loaded {len(documents)} rows from {file_path.name}")
         return documents
     
+    def load_from_uoload(
+            self,
+            file:BinaryIO,
+            filename:str,)->list[Document]:
+        extension= Path(filename).suffix.lower()
+        if extension not in self.SUPPORTED_EXTENSIONS:
+            raise ValueError(
+                f"Unsupported file extension :{extension}.",
+                f"Supported:{self.SUPPORTED_EXTENSIONS}"
+            )
+        with tempfile.NamedTemporaryFile(
+            delete= False,
+            suffix=extension,
+        )as tmp_file:
+            tmp_file.write(file.read())
+            tmp_path = tmp_file.name
+        try:
+            documents = self.load_file(tmp_path)
+
+            # Update metadata with original filename
+            for doc in documents:
+                doc.metadata["source"] = filename
+
+            return documents
+        finally:
+            # Clean up temp file
+            Path(tmp_path).unlink(missing_ok=True)
     
+    def split_documents(self, documents: list[Document]) -> list[Document]:
+        """Split documents into chunks.
+
+        Args:
+            documents: List of Document objects
+
+        Returns:
+            List of chunked Document objects
+        """
+        logger.info(f"Splitting {len(documents)} documents into chunks")
+
+        chunks = self.text_splitter.split_documents(documents)
+
+        logger.info(f"Created {len(chunks)} chunks")
+        return chunks
+
+    def process_file(self, file_path: str | Path) -> list[Document]:
+        """Load and split a file in one step.
+
+        Args:
+            file_path: Path to file
+
+        Returns:
+            List of chunked Document objects
+        """
+        documents = self.load_file(file_path)
+        return self.split_documents(documents)
+
+    def process_upload(
+        self,
+        file: BinaryIO,
+        filename: str,
+    ) -> list[Document]:
+        """Load and split an uploaded file.
+
+        Args:
+            file: File-like object
+            filename: Original filename
+
+        Returns:
+            List of chunked Document objects
+        """
+        documents = self.load_from_upload(file, filename)
+        return self.split_documents(documents)
