@@ -1,0 +1,36 @@
+ipykernel
+langchain_community
+langchain_core
+langchain_text_splitters
+# Core Framework
+fastapi
+uvicorn[standard]
+python-multipart
+
+# LangChain & AI
+langchain
+langchain-openai
+langchain-qdrant
+
+langchain-text-splitters
+
+# Vector Database
+qdrant-client
+
+# Document Processing
+pypdf
+python-docx
+
+# Configuration & Validation
+pydantic
+pydantic-settings
+python-dotenv
+
+# Logging & Monitoring
+structlog
+langsmith==0.4.55
+
+# HTTP Client
+httpx
+datasets
+ragas==0.3.7

@@ -1,0 +1,29 @@
+[project]
+name = "rag-qa-ci-cd"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "datasets>=4.8.2",
+    "fastapi>=0.135.1",
+    "httpx>=0.28.1",
+    "ipykernel>=7.2.0",
+    "langchain>=1.2.12",
+    "langchain-community>=0.4.1",
+    "langchain-core>=1.2.19",
+    "langchain-openai>=1.1.11",
+    "langchain-qdrant>=1.1.0",
+    "langchain-text-splitters>=1.1.1",
+    "langsmith==0.4.55",
+    "pydantic>=2.12.5",
+    "pydantic-settings>=2.13.1",
+    "pypdf>=6.9.1",
+    "python-docx>=1.2.0",
+    "python-dotenv>=1.2.2",
+    "python-multipart>=0.0.22",
+    "qdrant-client>=1.17.1",
+    "ragas==0.3.7",
+    "structlog>=25.5.0",
+    "uvicorn[standard]>=0.42.0",
+]
